@@ -30,8 +30,8 @@ export async function generateStaticParams() {
 
   // Combina las listas de IDs
   const allMovieIds = [
-    ...movies.map((movie) => ({ movieId: movie.id })),
-    ...popularMovies.map((movie) => ({ movieId: movie.id })),
+    ...movies.map((movie) => ({ params: { movieId: movie.id } })),
+    ...popularMovies.map((movie) => ({ params: { movieId: movie.id } })),
   ];
 
   return allMovieIds;
@@ -42,11 +42,17 @@ export default async function MovieIdPage({
 }: {
   params: { movieId: string };
 }) {
+  if (!params.movieId) {
+    redirect("/");
+    return null;
+  }
+
   const { movieFilm, popularMovie } = await getMovieData(params.movieId);
 
   // Redirigir si no se encuentra la película
   if (!movieFilm && !popularMovie) {
     redirect("/");
+    return null;
   }
 
   // Determinar la película actual y su título
