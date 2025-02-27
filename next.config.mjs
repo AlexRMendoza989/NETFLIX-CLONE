@@ -3,7 +3,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["bcryptjs"], // Excluye bcryptjs del Edge Runtime
   },
-  output: "standalone", // Genera una compilación independiente para despliegues en contenedores
+  output: "export", // Genera una compilación independiente para despliegues en contenedores
   images: {
     remotePatterns: [
       {
