@@ -42,7 +42,7 @@ export function RegisterForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/auth/register", values, {
+      await axios.post("/api/auth/register", values, {
         headers: { "Content-Type": "application/json" },
       });
 

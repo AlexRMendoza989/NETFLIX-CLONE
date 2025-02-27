@@ -3,6 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,15 +19,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "@/hooks/use-toast";
 
 import { FormAddProfileProps } from "./FormAddProfile.types";
 import { formSchema } from "./FormAddProfile.form";
 import { dataProfilesImages } from "./FormAddProfile.data";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import axios from "axios";
-import { toast } from "@/hooks/use-toast";
 
 export function FormAddProfile(props: FormAddProfileProps) {
   const { setOpen } = props;
@@ -41,23 +41,21 @@ export function FormAddProfile(props: FormAddProfileProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/userNetflix", values);
-      if (response.status !== 200) {
-        toast({
-          title: "Ops! Ha ocurrido un error",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "¡Usuario creado correctamente!",
-        });
-      }
+      await axios.post("/api/userNetflix", values);
+
+      toast({
+        title: "¡Usuario creado correctamente!",
+      });
+
       router.refresh();
       setOpen(false);
     } catch (error) {
-      console.log(error);
-      toast({ title: "Ops! Ha ocurrido un error", variant: "destructive" });
-
+      console.error(error);
+      toast({
+        title: "Ops! Ha ocurrido un error",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
     }
   };
