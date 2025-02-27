@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["bcrypt"], // Permite usar bcryptjs en Server Components
+    serverComponentsExternalPackages: ["bcryptjs"], // Excluye bcryptjs del Edge Runtime
   },
   output: "standalone", // Genera una compilación independiente para despliegues en contenedores
   images: {
@@ -14,7 +14,6 @@ const nextConfig = {
       },
     ],
   },
-  // Configuración adicional para evitar problemas con módulos nativos
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Evita que Webpack intente emular módulos de Node.js en el cliente
