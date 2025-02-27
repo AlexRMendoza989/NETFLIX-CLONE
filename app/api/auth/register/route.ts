@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import { hashSync } from 'bcrypt-edge';
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const { email, password } = await request.json();
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = hashSync(password, 10);
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {

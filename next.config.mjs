@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+ 
   experimental: {
-    serverComponentsExternalPackages: ["bcryptjs"], // Excluye bcryptjs del Edge Runtime
+    serverComponentsExternalPackages: ["bcrypt-edge"], // Excluye bcryptjs del Edge Runtime
   },
   
   images: {
