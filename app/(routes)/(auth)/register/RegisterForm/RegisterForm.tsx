@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios, { AxiosError } from "axios"; // Asegúrate de importar AxiosError si lo usas
+import axios, { AxiosError } from "axios"; // Importación correcta de AxiosError
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 
-// 📌 Corrección del esquema Zod
+// Esquema Zod para validación del formulario
 const formSchema = z
   .object({
     email: z.string().email("Correo inválido"),
@@ -43,27 +43,37 @@ export function RegisterForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Valores enviados:", values);
-    
+
     try {
       const response = await axios.post("/api/auth/register", values, {
         headers: { "Content-Type": "application/json" },
       });
 
       console.log("Respuesta de la API:", response.data);
-      
+
       toast({
         title: "Usuario registrado correctamente",
       });
 
       router.push("/profiles");
-    } catch (error: AxiosError | Error) { // Usando AxiosError o Error en lugar de 'any'
-      console.error("Error en el registro:", error?.response?.data || error.message);
+    } catch (error) {
+      // Uso correcto de AxiosError
+      if (error instanceof AxiosError) {
+        console.error("Error en el registro:", error.response?.data || error.message);
 
-      toast({
-        title: "Error al registrar usuario",
-        description: error?.response?.data?.message || "Intenta de nuevo",
-        variant: "destructive",
-      });
+        toast({
+          title: "Error al registrar usuario",
+          description: error.response?.data?.message || "Intenta de nuevo",
+          variant: "destructive",
+        });
+      } else {
+        console.error("Error desconocido:", error);
+        toast({
+          title: "Error desconocido",
+          description: "Ocurrió un error inesperado. Intenta de nuevo.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
