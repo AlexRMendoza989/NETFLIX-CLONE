@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { getUserByEmail } from "./data/user";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 import { sign } from "crypto";
 import { signInSchema } from "./lib/zod";
 

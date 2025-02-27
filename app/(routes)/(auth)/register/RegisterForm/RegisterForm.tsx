@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios, { AxiosError } from "axios"; // Importación correcta de AxiosError
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,6 @@ export function RegisterForm() {
 
       router.push("/profiles");
     } catch (error) {
-      // Uso correcto de AxiosError
       if (error instanceof AxiosError) {
         console.error("Error en el registro:", error.response?.data || error.message);
 
@@ -66,10 +65,17 @@ export function RegisterForm() {
           description: error.response?.data?.message || "Intenta de nuevo",
           variant: "destructive",
         });
-      } else {
-        console.error("Error desconocido:", error);
+      } else if (error instanceof Error) {
+        console.error("Error desconocido:", error.message);
         toast({
           title: "Error desconocido",
+          description: "Ocurrió un error inesperado. Intenta de nuevo.",
+          variant: "destructive",
+        });
+      } else {
+        console.error("Error no manejado:", error);
+        toast({
+          title: "Error no manejado",
           description: "Ocurrió un error inesperado. Intenta de nuevo.",
           variant: "destructive",
         });
