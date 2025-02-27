@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 
-// Esquema Zod para validación del formulario
 const formSchema = z
   .object({
     email: z.string().email("Correo inválido"),
@@ -42,14 +41,10 @@ export function RegisterForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Valores enviados:", values);
-
     try {
       const response = await axios.post("/api/auth/register", values, {
         headers: { "Content-Type": "application/json" },
       });
-
-      console.log("Respuesta de la API:", response.data);
 
       toast({
         title: "Usuario registrado correctamente",
@@ -58,24 +53,14 @@ export function RegisterForm() {
       router.push("/profiles");
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.error("Error en el registro:", error.response?.data || error.message);
-
         toast({
           title: "Error al registrar usuario",
           description: error.response?.data?.message || "Intenta de nuevo",
           variant: "destructive",
         });
-      } else if (error instanceof Error) {
-        console.error("Error desconocido:", error.message);
+      } else {
         toast({
           title: "Error desconocido",
-          description: "Ocurrió un error inesperado. Intenta de nuevo.",
-          variant: "destructive",
-        });
-      } else {
-        console.error("Error no manejado:", error);
-        toast({
-          title: "Error no manejado",
           description: "Ocurrió un error inesperado. Intenta de nuevo.",
           variant: "destructive",
         });
@@ -86,7 +71,6 @@ export function RegisterForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Campo de Email */}
         <FormField
           control={form.control}
           name="email"
@@ -100,7 +84,6 @@ export function RegisterForm() {
           )}
         />
 
-        {/* Campo de Contraseña */}
         <FormField
           control={form.control}
           name="password"
@@ -114,7 +97,6 @@ export function RegisterForm() {
           )}
         />
 
-        {/* Campo de Repetir Contraseña */}
         <FormField
           control={form.control}
           name="repeatPassword"
