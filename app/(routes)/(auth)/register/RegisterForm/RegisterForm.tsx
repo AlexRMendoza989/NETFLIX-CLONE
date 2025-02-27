@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios"; // Si no usas AxiosError, elimina la importación
+import axios, { AxiosError } from "axios"; // Asegúrate de importar AxiosError si lo usas
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export function RegisterForm() {
       });
 
       router.push("/profiles");
-    } catch (error: any) { // Si no usas AxiosError, utiliza 'any' para el tipo de error
+    } catch (error: AxiosError | Error) { // Usando AxiosError o Error en lugar de 'any'
       console.error("Error en el registro:", error?.response?.data || error.message);
 
       toast({
