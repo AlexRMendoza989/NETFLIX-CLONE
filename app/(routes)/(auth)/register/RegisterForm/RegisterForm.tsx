@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export function RegisterForm() {
       });
 
       router.push("/profiles");
-    } catch (error: any) {
+    } catch (error: AxiosError) {
       console.error("Error en el registro:", error?.response?.data || error.message);
 
       toast({
